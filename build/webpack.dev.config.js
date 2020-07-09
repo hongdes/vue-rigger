@@ -4,17 +4,16 @@ const HtmlwebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   mode: "development",
   entry: path.join(__dirname, '../src/index.js'),
-  output: {
-    path: path.join(__dirname, '../dist'),
-    // 输出文件名，可以写入目录层级在里面。这里使用[name]，是为了打包的时候，生成的名称根据打包模块自动适应名字。
-    filename: "static/js/[name].js", 
-    publicPath: "./" // 输出的文件是会自动注入到 index.html 里面的，此处的作用是：在注入时，src 的最前方的一截内容。
-  },
   // output: {
-  //   path: '/',
-  //   filename: '[name].js',
-  //   publicPath: '/'
+  //   path: path.join(__dirname, '../dist'),
+  //   // 输出文件名，可以写入目录层级在里面。这里使用[name]，是为了打包的时候，生成的名称根据打包模块自动适应名字。
+  //   filename: "static/js/[name].js", 
+  //   publicPath: "./" // 输出的文件是会自动注入到 index.html 里面的，此处的作用是：在注入时，src 的最前方的一截内容。
   // },
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  },
   module: {
     rules: [
       {
@@ -58,7 +57,7 @@ module.exports = {
   },
   // vueloader插件
   plugins: [
-    new VueloaderPlugin(),
+    // new VueloaderPlugin(),
     new HtmlwebpackPlugin({ // 将 index.html 也打包到输出中。
       filename: 'index.html',
       template: path.join(__dirname, '../index.html'),
