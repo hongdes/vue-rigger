@@ -1,6 +1,9 @@
 const path = require('path');
 const VueloaderPlugin = require("vue-loader/lib/plugin");
 const HtmlwebpackPlugin = require('html-webpack-plugin');
+function resolve(dir) {
+  return path.join(__dirname, '..', dir)
+}
 module.exports = {
   mode: "development",
   entry: path.join(__dirname, '../src/index.js'),
@@ -12,7 +15,7 @@ module.exports = {
   // },
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, '../dist')
   },
   module: {
     rules: [
@@ -46,6 +49,34 @@ module.exports = {
     ]
   },
   devServer: {
+    historyApiFallback: {
+      rewrites: [
+        { from: /.*/, to: '/index.html' },
+      ],
+    },
+    // assetsSubDirectory: 'static',
+    // assetsPublicPath: '/',
+    compress: true, // 自动gzip压缩
+    clientLogLevel: 'none', // 不要显示启动服务器日志信息
+    quiet: true,// 除了一些基本启动信息以外, 其他内容都不要显示
+    proxy: {
+      '/api': {
+        //  target: 'http://mmath.classba.cn/',
+         target: 'http://mmath.classba.cn/',
+        // target: 'http://chenks-math_v2.classba.cn/',
+        // target: 'http://tan-math_v2.classba.cn/',
+        // target: 'http://tan-mmath.classba.cn/',
+        // target: 'http://mmath.classba.cn/',
+        // target: 'http://tan-math_v2.classba.cn/',
+        // target: 'http://test-aiada.classba.cn/',  //测试studyweb.classba.cn',
+        // target: 'http://tan-
+        // target: 'http://lv-studyweb.classba.cn',
+        // target: 'http://wr-studyweb.classba.cn',
+        secure: false,
+        changeOrigin: true,
+      },
+    },
+
     open: true,
     port: 8099,
     hot: true,
@@ -53,11 +84,15 @@ module.exports = {
   },
   // webpack在编译打包时，要处理那些文件：
   resolve: {
-    extensions: [".js", ".vue", ".json"] // 三种基本的必须要加入噻， vue单页面组件， 所以vue后缀文件必不可少了。
+    extensions: [".js", ".vue", ".json"], // 三种基本的必须要加入噻， vue单页面组件， 所以vue后缀文件必不可少了。
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js',
+      '@': resolve('src'),
+    }
   },
   // vueloader插件
   plugins: [
-    // new VueloaderPlugin(),
+    new VueloaderPlugin(),
     new HtmlwebpackPlugin({ // 将 index.html 也打包到输出中。
       filename: 'index.html',
       template: path.join(__dirname, '../index.html'),
